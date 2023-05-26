@@ -2,29 +2,26 @@ import { galleryItems } from "./gallery-items.js";
 
 const galleryRef = document.querySelector(".gallery");
 
-galleryRef.innerHTML = createGalleryMarkup(galleryItems);
-
-galleryRef.addEventListener("click", showImage);
-
-function createGalleryMarkup(images) {
-  return images
+const createGalleryMarkup = (images) =>
+  images
     .map(
-      (image) => `
-    <li class="gallery__item">
-    <a class="gallery__link" href="${image.original}">
-    <img
-    class="gallery__image"
-    src="${image.preview}"
-    data-source="${image.original}"
-    alt="${image.description}"
-    />
-    </a>
-    </li>`
+      ({ original, preview, description }) => `
+        <li class="gallery__item">
+          <a class="gallery__link" href="${original}">
+            <img
+              class="gallery__image"
+              src="${preview}"
+              data-source="${original}"
+              alt="${description}"
+            />
+          </a>
+        </li>`
     )
     .join("");
-}
 
-function showImage(event) {
+galleryRef.innerHTML = createGalleryMarkup(galleryItems);
+
+const showImage = (event) => {
   event.preventDefault();
 
   const image = event.target.dataset.source;
@@ -34,12 +31,14 @@ function showImage(event) {
 
   galleryModal.show();
 
-  window.addEventListener("keydown", closeModalOnKey);
-
-  function closeModalOnKey(event) {
+  const closeModalOnKey = (event) => {
     if (event.code === "Escape") {
       galleryModal.close();
       window.removeEventListener("keydown", closeModalOnKey);
     }
-  }
-}
+  };
+
+  window.addEventListener("keydown", closeModalOnKey);
+};
+
+galleryRef.addEventListener("click", showImage);
