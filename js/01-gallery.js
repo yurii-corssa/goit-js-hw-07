@@ -22,6 +22,9 @@ const createGalleryMarkup = (images) =>
 galleryRef.innerHTML = createGalleryMarkup(galleryItems);
 
 const showImage = (event) => {
+  if (event.target.nodeName !== "IMG") {
+    return;
+  }
   event.preventDefault();
 
   const image = event.target.dataset.source;
